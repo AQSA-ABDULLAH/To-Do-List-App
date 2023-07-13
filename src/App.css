@@ -13,6 +13,7 @@
   background-color: #b3d2e3;
   border-radius: 10px;
   box-shadow: 0px 10px 10px rgb(red, green, blue);
+  overflow-y: scroll;
 }
 
 .todos_wrapper {
@@ -82,7 +83,7 @@
 }
 
 
-.Inprogress_card {
+.inProgress_card {
   width: 100%;
   width: 209px;
   height: 95px;
@@ -98,7 +99,7 @@
 }
 
 
-.Completed_card {
+.completed_card {
   width: 100%;
   width: 209px;
   height: 95px;
