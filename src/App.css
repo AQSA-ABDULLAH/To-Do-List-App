@@ -1,5 +1,4 @@
 .App {
-  text-align: center;
   width: 100vw;
   height: 100vh;
   display: flex;
@@ -12,35 +11,62 @@
   height: 90vh;  
   border-radius: 10px;
   box-shadow: 0px 10px 10px rgb(red, green, blue);
-  overflow-y: scroll;
   padding-right: 20PX;
 }
 
+.NavBar{
+  display: flex;
+  justify-content: space-between;
+}
+
+
 .title{
   font-size: 40px;
-  text-align: left;
-  left: 127px;
   font-family: Josefin Sans;
   font-weight: 500;
-  text-align: left;
   color: #3F51B5;
+  margin-bottom: 20px;
+  margin-top: 7px;
 }
 
 .title svg {
-  width: 40px;
+  width: 60px;
   height: 40px;
-  vertical-align: middle;
+  vertical-align: -5px;
 }
 
 
 form{
   font-size: 40px;
-  text-align: left;
-  left: 127px;
   font-family: Josefin Sans;
   font-weight: 500;
-  text-align: right;
   color: #3F51B5;
+}
+.form-control {
+  width: 300px;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.btn {
+  width: 40px;
+  height: 40px;
+  margin-left: 10px;
+  background-color: #3F51B5;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  vertical-align: -3px;
+}
+
+.btn:hover {
+  background-color: #303F9F;
+}
+
+.icon {
+  color: #fff;
+  font-size: 20px;
 }
 
 .todos_wrapper {
@@ -48,14 +74,18 @@ form{
   justify-content: space-between;
   align-items: flex-start;
   margin-top: 20px;
+  background-color: #e5eef3;
+  padding: 20px 40px;
 }
 
 
 .todo_title {
   font-size: 20px;
   font-weight: 700;
-  position: relative; /* Add position relative to create a stacking context */
-  margin-bottom: 10px; /* Add some bottom margin for the line */
+  position: relative; 
+  margin-bottom: 10px; 
+  margin-left: 38px;
+  margin-right: 40px;
 }
 
 .todo_title::after {
@@ -73,20 +103,21 @@ form{
   justify-content: space-between;
   align-items: flex-start;
   margin-top: 20px;
+  border-radius: 8px;
 }
 
 .todos_list {
-  position: relative; /* Add position relative for the container */
+  position: relative; 
 }
 
 .todos_list:not(:last-child)::after {
   content: "";
   position: absolute;
   top: 0;
-  right: -10px; /* Adjust the position of the line */
+  right: -30px; /* Adjust the position of the line */
   height: 100%;
-  width: 1px;
-  background-color: #ccc; /* Adjust the color of the line */
+  width: 1.5px;
+  background-color: #aca7a7; /* Adjust the color of the line */
 }
 
 
@@ -101,18 +132,18 @@ form{
 }
 
 .todo_card {
-  width: 100%;
-  width: 209px;
+  text-align: center;
+  width: 180px;
   height: 95px;
   top: 231px;
   left: 91px;
   border-radius: 10px;
   height: auto;
   color: black;
-  background: #E5E5E5;
-  padding: 2px 5px;
-  margin-top: 3px;
-  margin-right: 6px;
+  background: #ebcdcd;
+  padding: 1px 2px;
+  margin-top: 9px;
+  margin-right: 10px;
 }
 
 
@@ -134,26 +165,9 @@ form{
   margin: 2px;
 }
 
-
-.Pending_card {
-  width: 100%;
-  width: 209px;
-  height: 95px;
-  top: 231px;
-  left: 91px;
-  border-radius: 10px;
-  height: auto;
-  color: black;
-  background: #E5E5E5;
-  padding: 2px 5px;
-  margin-top: 3px;
-  margin-right: 6px;
-}
-
-
 .inProgress_card {
-  width: 100%;
-  width: 209px;
+  text-align: center;
+  width: 180px;
   height: 95px;
   top: 231px;
   left: 91px;
@@ -161,15 +175,15 @@ form{
   height: auto;
   color: black;
   background: #0098EE;
-  padding: 2px 5px;
-  margin-top: 3px;
-  margin-right: 6px;
+  padding: 1px 2px;
+  margin-top: 9px;
+  margin-right: 10px;
 }
 
 
 .completed_card {
-  width: 100%;
-  width: 209px;
+  text-align: center;
+  width: 180px;
   height: 95px;
   top: 231px;
   left: 91px;
@@ -177,7 +191,11 @@ form{
   height: auto;
   color: black;
   background: #00D770;
-  padding: 2px 5px;
-  margin-top: 3px;
-  margin-right: 6px;
+  padding: 1px 2px;
+  margin-top: 9px;
+  margin-right: 10px;
 }
+
+
+
+
