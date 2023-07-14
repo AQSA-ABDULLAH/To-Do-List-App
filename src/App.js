@@ -1,21 +1,32 @@
 import './App.css';
-import { FaCheck, FaTrash, FaPlusCircle } from "react-icons/fa"
+import { FaCheck, FaTrash} from "react-icons/fa";
 import React, { useState } from 'react';
-import './App.css';
+
+import '../node_modules/bootstrap-dark-5/dist/css/bootstrap-dark.min.css';
+import '../node_modules/bootstrap/dist/js/bootstrap.bundle';
+import '../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js';
 
 function App() {
   const [todos, setTodos] = useState([]);
   const [inProgress, setInProgress] = useState([]);
   const [completed, setCompleted] = useState([]);
   const [input, setInput] = useState('');
+  const [showForm, setShowForm] = useState(false);
 
   const addTodo = () => {
-    const todo = {
-      id: Math.floor(Math.random() * 1000),
-      text: input
+    if (input !== '') {
+      const todo = {
+        id: Math.floor(Math.random() * 1000),
+        text: input
+      }
+      setTodos([todo, ...todos]);
+      setInput('');
+      setShowForm(false);
     }
-    setTodos([todo, ...todos]);
-    setInput('');
+  }
+
+  const toggleForm = () => {
+    setShowForm(!showForm);
   }
 
   const addToProgress = (id) => {
@@ -51,12 +62,29 @@ function App() {
             </h3>
           </div>
           <div>
-            <form className='form_todo'>
-              <input type="text" className='form-control' onChange={(e) => setInput(e.target.value)} value={input} name='text' placeholder='Add New task' />
-              <button type="button" onClick={addTodo} className='btn'><FaPlusCircle className='icon' /></button>
-            </form>
+            <button className='btn btn-primary' onClick={toggleForm}>
+              ADD NEW TASK
+            </button>
           </div>
         </div>
+
+        {showForm && (
+          <div className='form_wrapper'>
+            <form className='form_todo'>
+              <input
+                type="text"
+                required
+                className='form_control'
+                onChange={(e) => setInput(e.target.value)}
+                value={input}
+                name='text'
+                placeholder='Add New task'
+              />
+              <button type="button" onClick={addTodo} className='btn btn-primary'>Submit
+              </button>
+            </form>
+          </div>
+        )}
 
         <div className='todos_wrapper'>
           <div className='todos_list'>
