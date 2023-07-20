@@ -1,5 +1,6 @@
 import './App.css';
-// import { FaCheck, FaTrash } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa";
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -51,10 +52,20 @@ function App() {
   //   setTodos(filteredTodos);
   // }
 
-  // const deleteTodo = (id) => {
-  //   const filteredTodos = todos.filter(x => x.id !== id);
-  //   setTodos(filteredTodos);
-  // }
+  const deleteTodo = (id) => {
+    console.log("i'm in delete button")
+    axios.delete(`http://localhost:3000/student/${id}`, {
+      name: input,
+    })
+      .then(() => {
+        const updatedTodos = todos.filter((item) => item._id !== id);
+        setTodos(updatedTodos);
+      })
+      .catch((error) => {
+        console.log("Error deleting the task", error);
+        // Handle error and provide user feedback (optional)
+      });
+  };;
 
   // const addToCompleted = (id) => {
   //   const item = inProgress.find(x => x.id === id);
@@ -108,8 +119,8 @@ function App() {
                 <p className="card_text">{item.name}</p>
                 {/* <p className="card_text">{item.phoneno}</p>
                 <p className="card_text">{item.address}</p> */}
-                {/* <FaCheck className="icon-check-todo"  />
-                <FaTrash className="icon-trash-todo"  /> */}
+                {/* <FaCheck className="icon-check-todo"  /> */}
+                <FaTrash className="icon-trash-todo" onClick={() => deleteTodo(item._id)}  />
               </div>
             )}
           </div>
