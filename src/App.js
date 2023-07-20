@@ -1,6 +1,7 @@
 import './App.css';
-import { FaCheck, FaTrash} from "react-icons/fa";
-import React, { useState } from 'react';
+// import { FaCheck, FaTrash } from "react-icons/fa";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 
 import '../node_modules/bootstrap-dark-5/dist/css/bootstrap-dark.min.css';
@@ -8,46 +9,59 @@ import '../node_modules/bootstrap/dist/js/bootstrap.bundle';
 import '../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js';
 
 function App() {
+
   const [todos, setTodos] = useState([]);
-  const [inProgress, setInProgress] = useState([]);
-  const [completed, setCompleted] = useState([]);
+  // const [inProgress, setInProgress] = useState([]);
+  // const [completed, setCompleted] = useState([]);
   const [input, setInput] = useState('');
   const [showForm, setShowForm] = useState(false);
 
-  const addTodo = () => {
-    if (input !== '') {
-      const todo = {
-        id: Math.floor(Math.random() * 1000),
-        text: input
-      }
-      setTodos([todo, ...todos]);
-      setInput('');
-      setShowForm(false);
-    }
+  useEffect(() => {
+    axios.get("http://localhost:3000/student")
+      .then(response => {
+        setTodos(response.data)
+      })
+      .catch(error => {
+        console.log("error", error)
+      })
+  }, [])
+
+  const addTodo = (e) => {
+    e.preventDefault(); // Prevent default form submission
+    axios.post("http://localhost:3000/student", {
+      name: input,
+    })
+    .then((response) => {
+      setTodos([...todos, response.data]); 
+      setInput(''); 
+    })
+    .catch((error) => {
+      console.log("error", error);
+    });
   }
 
   const toggleForm = () => {
     setShowForm(!showForm);
   }
 
-  const addToProgress = (id) => {
-    const item = todos.find(x => x.id === id);
-    setInProgress([item, ...inProgress]);
-    const filteredTodos = todos.filter(x => x.id !== id);
-    setTodos(filteredTodos);
-  }
+  // const addToProgress = (id) => {
+  //   const item = todos.find(x => x.id === id);
+  //   setInProgress([item, ...inProgress]);
+  //   const filteredTodos = todos.filter(x => x.id !== id);
+  //   setTodos(filteredTodos);
+  // }
 
-  const deleteTodo = (id) => {
-    const filteredTodos = todos.filter(x => x.id !== id);
-    setTodos(filteredTodos);
-  }
+  // const deleteTodo = (id) => {
+  //   const filteredTodos = todos.filter(x => x.id !== id);
+  //   setTodos(filteredTodos);
+  // }
 
-  const addToCompleted = (id) => {
-    const item = inProgress.find(x => x.id === id);
-    setCompleted([item, ...completed]);
-    const filteredInProgress = inProgress.filter(x => x.id !== id);
-    setInProgress(filteredInProgress);
-  }
+  // const addToCompleted = (id) => {
+  //   const item = inProgress.find(x => x.id === id);
+  //   setCompleted([item, ...completed]);
+  //   const filteredInProgress = inProgress.filter(x => x.id !== id);
+  //   setInProgress(filteredInProgress);
+  // }
 
   return (
     <div className="App">
@@ -71,18 +85,17 @@ function App() {
 
         {showForm && (
           <div className='form_wrapper'>
-            <form className='form_todo'>
+            <form className='form_todo' onSubmit={addTodo}>
               <input
                 type="text"
                 required
                 className='form_control'
-                onChange={(e) => setInput(e.target.value)}
+                onChange={(e) => {setInput(e.target.value)}}
                 value={input}
                 name='text'
                 placeholder='Add New task'
               />
-              <button type="button" onClick={addTodo} className='btn btn-primary'>Submit
-              </button>
+              <button type="submit" className='btn btn-primary'>Submit</button>
             </form>
           </div>
         )}
@@ -90,31 +103,33 @@ function App() {
         <div className='todos_wrapper'>
           <div className='todos_list'>
             <h3 className='todo_title'>Pending List</h3>
-            {todos.map((item, index) =>
-              <div className='todo_card' key={item.id}>
-                <p className="card_text">{item.text}</p>
-                <FaCheck className="icon-check-todo" onClick={() => addToProgress(item.id)} />
-                <FaTrash className="icon-trash-todo" onClick={() => deleteTodo(item.id)} />
+            {todos.map((item) =>
+              <div className='todo_card'>
+                <p className="card_text">{item.name}</p>
+                {/* <p className="card_text">{item.phoneno}</p>
+                <p className="card_text">{item.address}</p> */}
+                {/* <FaCheck className="icon-check-todo"  />
+                <FaTrash className="icon-trash-todo"  /> */}
               </div>
             )}
           </div>
           <div className='todos_list'>
             <h3 className='todo_title'>In Progress</h3>
-            {inProgress.map((item, index) =>
+            {/* {inProgress.map((item, index) =>
               <div className='inProgress_card' key={item.id}>
                 <p className="card_text">{item.text}</p>
                 <FaCheck className="icon-check-todo" onClick={() => addToCompleted(item.id)} />
               </div>
-            )}
+            )} */}
           </div>
           <div className='todos_list'>
             <h3 className='todo_title'>Completed</h3>
-            {completed.map((item, index) =>
+            {/* {completed.map((item, index) =>
               <div className='completed_card' key={item.id}>
                 <p className="card_text">{item.text}</p>
                 <FaCheck className="icon-check-todo" />
               </div>
-            )}
+            )} */}
           </div>
         </div>
       </div>
