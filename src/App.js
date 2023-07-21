@@ -32,9 +32,9 @@ function App() {
       document.body.classList.add('dark-mode');
       setDarkMode(true);
     }
-    }, [])
+  }, [])
 
-    // Function to toggle between dark and light modes
+  // Function to toggle between dark and light modes
   const toggleDarkMode = () => {
     if (darkMode) {
       document.body.classList.remove('dark-mode');
@@ -111,12 +111,12 @@ function App() {
             </h3>
           </div>
           <div>
-          <button className={`btn ${darkMode ? 'btn-light' : 'btn-primary'} m-2`} onClick={toggleForm}>
-            ADD NEW TASK
-          </button>
-          <button className={`btn ${darkMode ? 'btn-light' : 'btn-secondary'}`} onClick={toggleDarkMode}>
-            {darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-          </button>
+            <button className={`btn ${darkMode ? 'btn-light' : 'btn-primary'} m-2`} onClick={toggleForm}>
+              ADD NEW TASK
+            </button>
+            <button className={`btn ${darkMode ? 'btn-light' : 'btn-secondary'}`} onClick={toggleDarkMode}>
+              {darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            </button>
           </div>
         </div>
 
@@ -136,7 +136,6 @@ function App() {
             </form>
           </div>
         )}
-
         <div className={`todos_wrapper ${darkMode ? 'dark-mode' : ''}`}>
           <div className='todos_list'>
             <h3 className='todo_title'>Pending List</h3>
