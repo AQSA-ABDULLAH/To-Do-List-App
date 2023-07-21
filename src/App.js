@@ -12,10 +12,11 @@ import '../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js';
 function App() {
 
   const [todos, setTodos] = useState([]);
-  // const [inProgress, setInProgress] = useState([]);
-  // const [completed, setCompleted] = useState([]);
+  const [inProgress, setInProgress] = useState([]);
+  const [completed, setCompleted] = useState([]);
   const [input, setInput] = useState('');
   const [showForm, setShowForm] = useState(false);
+  const [darkMode, setDarkMode] = useState(localStorage.getItem('theme') === 'dark');
 
   useEffect(() => {
     axios.get("http://localhost:3000/student")
@@ -25,32 +26,55 @@ function App() {
       .catch(error => {
         console.log("error", error)
       })
-  }, [])
+
+    const theme = localStorage.getItem('theme');
+    if (theme === 'dark') {
+      document.body.classList.add('dark-mode');
+      setDarkMode(true);
+    }
+    }, [])
+
+    // Function to toggle between dark and light modes
+  const toggleDarkMode = () => {
+    if (darkMode) {
+      document.body.classList.remove('dark-mode');
+      setDarkMode(false);
+      localStorage.setItem('theme', 'light');
+    } else {
+      document.body.classList.add('dark-mode');
+      setDarkMode(true);
+      localStorage.setItem('theme', 'dark');
+    }
+  };
+
 
   const addTodo = (e) => {
     e.preventDefault(); // Prevent default form submission
     axios.post("http://localhost:3000/student", {
       name: input,
     })
-    .then((response) => {
-      setTodos([...todos, response.data]); 
-      setInput(''); 
-    })
-    .catch((error) => {
-      console.log("error", error);
-    });
+      .then((response) => {
+        setTodos([...todos, response.data]);
+        setInput('');
+        setShowForm(false);
+        // localStorage.setItem("Task",input)
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
   }
-
+  // localStorage.getItem('Task')
   const toggleForm = () => {
     setShowForm(!showForm);
-  }
+  };
 
-  // const addToProgress = (id) => {
-  //   const item = todos.find(x => x.id === id);
-  //   setInProgress([item, ...inProgress]);
-  //   const filteredTodos = todos.filter(x => x.id !== id);
-  //   setTodos(filteredTodos);
-  // }
+  const addToProgress = (id) => {
+    const item = todos.find((x) => x._id === id);
+    setInProgress([item, ...inProgress]);
+    const filteredTodos = todos.filter((x) => x._id !== id);
+    setTodos(filteredTodos);
+  };
+
 
   const deleteTodo = (id) => {
     console.log("i'm in delete button")
@@ -63,19 +87,18 @@ function App() {
       })
       .catch((error) => {
         console.log("Error deleting the task", error);
-        // Handle error and provide user feedback (optional)
+
       });
   };;
-
-  // const addToCompleted = (id) => {
-  //   const item = inProgress.find(x => x.id === id);
-  //   setCompleted([item, ...completed]);
-  //   const filteredInProgress = inProgress.filter(x => x.id !== id);
-  //   setInProgress(filteredInProgress);
-  // }
+  const addToCompleted = (id) => {
+    const item = inProgress.find((x) => x._id === id);
+    setCompleted([item, ...completed]);
+    const filteredInProgress = inProgress.filter((x) => x._id !== id);
+    setInProgress(filteredInProgress);
+  };
 
   return (
-    <div className="App">
+    <div className={`App ${darkMode ? 'dark-mode' : ''}`}>
       <div className='container'>
         <div className='NavBar'>
           <div className=''>
@@ -88,9 +111,12 @@ function App() {
             </h3>
           </div>
           <div>
-            <button className='btn btn-primary' onClick={toggleForm}>
-              ADD NEW TASK
-            </button>
+          <button className={`btn ${darkMode ? 'btn-light' : 'btn-primary'} m-2`} onClick={toggleForm}>
+            ADD NEW TASK
+          </button>
+          <button className={`btn ${darkMode ? 'btn-light' : 'btn-secondary'}`} onClick={toggleDarkMode}>
+            {darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          </button>
           </div>
         </div>
 
@@ -101,7 +127,7 @@ function App() {
                 type="text"
                 required
                 className='form_control'
-                onChange={(e) => {setInput(e.target.value)}}
+                onChange={(e) => { setInput(e.target.value) }}
                 value={input}
                 name='text'
                 placeholder='Add New task'
@@ -111,36 +137,36 @@ function App() {
           </div>
         )}
 
-        <div className='todos_wrapper'>
+        <div className={`todos_wrapper ${darkMode ? 'dark-mode' : ''}`}>
           <div className='todos_list'>
             <h3 className='todo_title'>Pending List</h3>
-            {todos.map((item) =>
-              <div className='todo_card'>
+            {todos.map((item) => (
+              <div className='todo_card' key={item._id}>
                 <p className="card_text">{item.name}</p>
-                {/* <p className="card_text">{item.phoneno}</p>
-                <p className="card_text">{item.address}</p> */}
-                {/* <FaCheck className="icon-check-todo"  /> */}
-                <FaTrash className="icon-trash-todo" onClick={() => deleteTodo(item._id)}  />
+                <FaCheck className="icon-check-todo" onClick={() => addToProgress(item._id)} />
+                <FaTrash className="icon-trash-todo" onClick={() => deleteTodo(item._id)} />
               </div>
-            )}
+            ))}
           </div>
+
           <div className='todos_list'>
             <h3 className='todo_title'>In Progress</h3>
-            {/* {inProgress.map((item, index) =>
-              <div className='inProgress_card' key={item.id}>
-                <p className="card_text">{item.text}</p>
-                <FaCheck className="icon-check-todo" onClick={() => addToCompleted(item.id)} />
+            {inProgress.map((item) => (
+              <div className='inProgress_card' key={item._id}>
+                <p className="card_text">{item.name}</p>
+                <FaCheck className="icon-check-todo" onClick={() => addToCompleted(item._id)} />
               </div>
-            )} */}
+            ))}
           </div>
+
           <div className='todos_list'>
             <h3 className='todo_title'>Completed</h3>
-            {/* {completed.map((item, index) =>
+            {completed.map((item, index) =>
               <div className='completed_card' key={item.id}>
-                <p className="card_text">{item.text}</p>
+                <p className="card_text">{item.name}</p>
                 <FaCheck className="icon-check-todo" />
               </div>
-            )} */}
+            )}
           </div>
         </div>
       </div>
