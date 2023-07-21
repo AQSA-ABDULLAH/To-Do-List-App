@@ -99,11 +99,13 @@ function App() {
   };
 
   const updateTodo = (id) => {
-    axios.put(`http://localhost:3000/student/${id}`, {
+    axios.patch(`http://localhost:3000/updatetask/${id}`, {
       name: updateText,
     })
       .then(() => {
-        const updatedTodos = todos.filter((item) => item._id !== id);
+        const updatedTodos = todos.map((item) =>
+          item._id === updateId ? { ...item, name: updateText } : item
+        );
         setTodos(updatedTodos);
 
       })
@@ -162,61 +164,47 @@ function App() {
           <div className='todos_list'>
             <h3 className='todo_title'>Pending List</h3>
             {todos.map((item) => (
-  <div className='todo_card' key={item._id}>
-    {updateId === item._id ? (
-      <form onSubmit={updateTodo}>
-        <input
-          type="text"
-          required
-          className='form_control'
-          onChange={(e) => setUpdateText(e.target.value)}
-          value={updateText}
-          name='text'
-        />
-        <button type="submit" className='btn btn-primary'>
-          Update
-        </button>
-      </form>
-    ) : (
-      <>
-        <p className="card_text">{item.name}</p>
-        <FaCheck className="icon-check-todo" onClick={() => addToProgress(item._id)} />
-        <FaTrash className="icon-trash-todo" onClick={() => deleteTodo(item._id)} />
-        <FaEdit className="icon-edit-todo" onClick={() => showUpdateForm(item._id, item.name)} />
-      </>
-    )}
-  </div>
-))}
+              <div className='todo_card' key={item._id}>
+                {updateId === item._id ? (
+                  <form>
+                    <input
+                      type="text"
+                      required
+                      className='form_control h-100 w-100'
+                      onChange={(e) => setUpdateText(e.target.value)}
+                      value={updateText}
+                      name='text'
+                    />
+                    <button type="submit" onClick={updateTodo(item._id)} className='btn btn-primary'>
+                      Update
+                    </button>
+                  </form>
+                ) : (
+                  <>
+                    <p className="card_text">{item.name}</p>
+                    <FaCheck className="icon-check-todo" onClick={() => addToProgress(item._id)} />
+                    <FaTrash className="icon-trash-todo" onClick={() => deleteTodo(item._id)} />
+                    <FaEdit className="icon-edit-todo" onClick={() => showUpdateForm(item._id, item.name)} />
+                  </>
+                )}
+              </div>
+            ))}
 
           </div>
 
           <div className='todos_list'>
             <h3 className='todo_title'>In Progress</h3>
             {inProgress.map((item) => (
-  <div className='inProgress_card' key={item._id}>
-    {updateId === item._id ? (
-      <form onSubmit={updateTodo}>
-        <input
-          type="text"
-          required
-          className='form_control'
-          onChange={(e) => setUpdateText(e.target.value)}
-          value={updateText}
-          name='text'
-        />
-        <button type="submit" className='btn btn-primary'>
-          Update
-        </button>
-      </form>
-    ) : (
-      <>
-        <p className="card_text">{item.name}</p>
-        <FaCheck className="icon-check-todo" onClick={() => addToCompleted(item._id)} />
-        <FaEdit className="icon-edit-todo" onClick={() => showUpdateForm(item._id, item.name)} />
-      </>
-    )}
-  </div>
-))}
+              <div className='inProgress_card' key={item._id}>
+
+                <>
+                  <p className="card_text">{item.name}</p>
+                  <FaCheck className="icon-check-todo" onClick={() => addToCompleted(item._id)} />
+
+                </>
+
+              </div>
+            ))}
 
           </div>
 
